@@ -3,11 +3,16 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
+
 from app_base.models import Hall
 
 
 def home(request):
     return render(request, 'app_base/home.html')
+
+
+def dashboard(request):
+    return render(request, 'halls/dashboard.html')
 
 
 class SignUpView(generic.CreateView):
@@ -23,6 +28,7 @@ class SignUpView(generic.CreateView):
         return view
 
 
+# CRUD
 class CreateHallView(generic.CreateView):
     model = Hall
     fields = ('title',)
@@ -33,3 +39,16 @@ class CreateHallView(generic.CreateView):
         form.instance.user = self.request.user
         super(CreateHallView, self).form_valid(form)
         return redirect('home')
+
+
+class DetailHallView(generic.DetailView):
+    model = Hall
+    template_name = 'halls/detail_hall.html'
+
+
+class UpdateHallView(object):
+    pass
+
+
+class DeleteHallView(object):
+    pass
