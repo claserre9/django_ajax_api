@@ -17,6 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin, auth
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 from django.urls import path
 
 from app_base import views
@@ -30,7 +31,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     # Hall
-    path('halloffame/create/', views.CreateHallView.as_view(), name='create_hall')
+    path('halloffame/create/', login_required(views.CreateHallView.as_view()), name='create_hall')
 
 ]
 
