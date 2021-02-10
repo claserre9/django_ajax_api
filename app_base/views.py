@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
+from app_base.forms import VideoForm
 from app_base.models import Hall
 
 
@@ -15,6 +16,11 @@ def home(request):
 @login_required
 def dashboard(request):
     return render(request, 'halls/dashboard.html')
+
+
+def add_video(request, pk):
+    form = VideoForm()
+    return render(request, 'halls/add_video.html', dict(form=form))
 
 
 class SignUpView(generic.CreateView):

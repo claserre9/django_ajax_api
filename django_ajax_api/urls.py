@@ -22,7 +22,6 @@ from django.urls import path
 
 from app_base import views
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
@@ -36,6 +35,8 @@ urlpatterns = [
     path('halloffame/<int:pk>', login_required(views.DetailHallView.as_view()), name='detail_hall'),
     path('halloffame/<int:pk>/update', login_required(views.UpdateHallView.as_view()), name='update_hall'),
     path('halloffame/<int:pk>/delete', login_required(views.DeleteHallView.as_view()), name='delete_hall'),
+    # Video
+    path('halloffame/<int:pk>/addvideo', login_required(views.add_video), name='add_video'),
 
 ]
 

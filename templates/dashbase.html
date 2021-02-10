@@ -1,9 +1,12 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/styles.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome5-overrides.min.css' %}">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/flatly/bootstrap.min.css"
@@ -18,12 +21,11 @@
     </title>
 </head>
 <body>
-{% include '_partials/_navbar.html' %}
-<div class="container my-5">
-    {% block content %}
+{% include '_partials/_sidebar.html' %}
 
-    {% endblock %}
-</div>
+{% block content %}
+
+{% endblock %}
 
 
 <!-- Optional JavaScript; choose one of the two! -->
@@ -46,6 +48,7 @@
         crossorigin="anonymous"></script>
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="{% static 'js/script.min.js' %}"></script>
 
 </body>
 </html>
