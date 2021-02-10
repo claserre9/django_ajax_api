@@ -1,2 +1,2 @@
-# django_ajax_api
+# Django with Ajax
 Youtube api usage with Django Backend
