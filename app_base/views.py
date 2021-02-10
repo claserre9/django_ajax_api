@@ -5,8 +5,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
-from app_base.forms import VideoForm
-from app_base.models import Hall
+from app_base.forms import VideoForm, VideoSearchForm
+from app_base.models import Hall, Video
 
 
 def home(request):
@@ -20,7 +20,19 @@ def dashboard(request):
 
 def add_video(request, pk):
     form = VideoForm()
-    return render(request, 'halls/add_video.html', dict(form=form))
+    video_search_form = VideoSearchForm()
+    if request.method == 'POST':
+        filled_form = VideoForm(request.POST)
+        if filled_form.is_valid():
+            title, url, youtube_id = filled_form.cleaned_data.values()
+            video = Video()
+            video.title = title
+            video.url = url
+            video.youtube_id = youtube_id
+            video.hall = Hall.objects.get(pk=pk)
+            video.save()
+
+    return render(request, 'halls/add_video.html', dict(form=form, video_search_form=video_search_form))
 
 
 class SignUpView(generic.CreateView):
