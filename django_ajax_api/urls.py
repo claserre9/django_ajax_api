@@ -25,9 +25,12 @@ from app_base import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+    # Auth
     path('signup/', views.SignUpView.as_view(), name='signup'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    # Hall
+    path('halloffame/create/', views.CreateHallView.as_view(), name='create_hall')
 
 ]
 
