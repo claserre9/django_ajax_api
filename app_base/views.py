@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -11,6 +12,7 @@ def home(request):
     return render(request, 'app_base/home.html')
 
 
+@login_required
 def dashboard(request):
     return render(request, 'halls/dashboard.html')
 
@@ -46,9 +48,14 @@ class DetailHallView(generic.DetailView):
     template_name = 'halls/detail_hall.html'
 
 
-class UpdateHallView(object):
-    pass
+class UpdateHallView(generic.UpdateView):
+    model = Hall
+    template_name = 'halls/update_hall.html'
+    fields = ('title',)
+    success_url = reverse_lazy('dashboard')
 
 
-class DeleteHallView(object):
-    pass
+class DeleteHallView(generic.DeleteView):
+    model = Hall
+    template_name = 'halls/delete_hall.html'
+    success_url = reverse_lazy('dashboard')

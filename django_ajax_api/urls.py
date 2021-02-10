@@ -34,8 +34,8 @@ urlpatterns = [
     # Hall CRUD operations
     path('halloffame/create/', login_required(views.CreateHallView.as_view()), name='create_hall'),
     path('halloffame/<int:pk>', login_required(views.DetailHallView.as_view()), name='detail_hall'),
-    # path('halloffame//<int:pk>/update', login_required(views.UpdateHallView.as_view()), name='update_hall'),
-    # path('halloffame//<int:pk>/delete', login_required(views.DeleteHallView.as_view()), name='delete_hall'),
+    path('halloffame/<int:pk>/update', login_required(views.UpdateHallView.as_view()), name='update_hall'),
+    path('halloffame/<int:pk>/delete', login_required(views.DeleteHallView.as_view()), name='delete_hall'),
 
 ]
 

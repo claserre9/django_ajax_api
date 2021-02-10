@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Update a Hall
+{% endblock %}
+
+{% block content %}
+    <h2>Update Hall of fame</h2>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+       <button type="submit" class="btn btn-outline-primary d-inline">Save</button>
+    </form>
+
+    <a href="{% url 'delete_hall' hall.pk %}" class="btn btn-outline-danger ">Delete</a>
+
+{% endblock %}
