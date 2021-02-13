@@ -5,15 +5,15 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Add a video</h2>
+    <h2>Add a video to {{ hall.title }}</h2>
     <form action="" method="post">
         {% csrf_token %}
         {% load widget_tweaks %}
         {% for field in form %}
             <div class="form-group {% if field.errors %} alert alert-danger {% endif %}">
                 {{ field.errors }}
-            {{ field.label_tag }}
-            {%  render_field field class="form-control" %}
+                {{ field.label_tag }}
+                {% render_field field class="form-control" %}
             </div>
         {% endfor %}
         <button type="submit" class="btn btn-outline-primary">Add</button>
@@ -21,16 +21,122 @@
 
     <h3 class="my-3">OR</h3>
 
-    <form action="">
+    <form id="js-search-form" action="">
         {% load widget_tweaks %}
         {% for field in video_search_form %}
             <div class="form-group {% if field.errors %} alert alert-danger {% endif %}">
                 {{ field.errors }}
-            {{ field.label_tag }}
-            {%  render_field field class="form-control" %}
+                {{ field.label_tag }}
+                {% render_field field class="form-control" %}
             </div>
         {% endfor %}
-        <button type="submit" class="btn btn-outline-primary">Search</button>
+        <button id="js-search_btn" type="button" class="btn btn-outline-primary">Search</button>
+        <button id="js-clear_btn" type="button" class="btn btn-outline-success">Clear</button>
+
     </form>
+
+
+    <div id="search_results" class="card-columns">
+
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#js-search_btn").on('click', function () {
+
+
+                let $text = $("#id_search_term").val()
+                if ($text === '') {
+                    swal("You must search something !!");
+                } else {
+
+                    $.ajax({
+                        url: "{% url 'video_search' %}",
+                        data: {
+                            search_term: $text
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            let videos = data.items
+                            let embedded_videos = videos.map(v =>
+                                        `<div class="card my-4 h-100">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${v['snippet']['title']}</h5>
+                                                <iframe
+                                                    width="100%" height="225"
+                                                    src="https://www.youtube.com/embed/${v['id']['videoId']}?controls=0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowfullscreen>
+                                                </iframe>
+                                            </div>
+                                            <div class="card-footer">
+                                                 <a href="#" class="btn btn-primary" onclick="add_video('${v['id']['videoId']}', '${v['snippet']['title']}')">Add video</a>
+                                            </div>
+                                        </div>`)
+                            $('#search_results').append(embedded_videos)
+                            $('#js-clear_btn').on("click", function () {
+                                $('#search_results').empty()
+                            })
+
+                        }
+                    })
+                }
+            })
+        })
+
+        {#let old_card =  `#}
+        {#                <div class="col-md-4 mt-3">#}
+        {#                    <div class="card mb-4 shadow-sm">#}
+        {#                        <h5>${v['snippet']['title']}</h5>#}
+        {#                        <iframe#}
+        {#                            width="100%" height="225"#}
+        {#                            src="https://www.youtube.com/embed/${v['id']['videoId']}?controls=0"#}
+        {#                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"#}
+        {#                            allowfullscreen>#}
+        {#                        </iframe>#}
+        {#                    </div>#}
+        {#                    <a href="#" class="btn btn-primary" onclick="add_video('${v['id']['videoId']}', '${v['snippet']['title']}')">Add video</a>#}
+        {#                </div>`#}
+
+        card_example =
+            `<div class="card">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    </div>
+                <div class="card-footer">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                </div>
+            </div>`
+
+        function add_video(video_id, title) {
+            let csrf_token = $("[name=csrfmiddlewaretoken]").val();
+            $.ajax({
+                url: "{% url 'ajax_add_video' %}",
+                data: {
+                    title: title,
+                    id: video_id,
+                    url: `https://www.youtube.com/watch?v=${video_id}`,
+                    pk: {{ hall.pk }}
+                },
+                type: 'post',
+                headers: {
+                    "X-CSRFToken": csrf_token
+                },
+                dataType: 'json',
+                success: function (data) {
+                    swal({
+                        title: "Done",
+                        text: "Video added",
+                        icon: "success",
+                        button: "Ok!",
+                    });
+                }
+            })
+        }
+    </script>
+
 
 {% endblock %}

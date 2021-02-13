@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-{% load static %}
-
 {% block title %}
     Update a Hall
 {% endblock %}
@@ -10,10 +8,16 @@
     <h2>Update Hall of fame</h2>
     <form action="" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-       <button type="submit" class="btn btn-outline-primary d-inline">Save</button>
+        {% load widget_tweaks %}
+        {% for field in form %}
+            <div class="form-group {% if field.errors %} alert alert-danger {% endif %}">
+                {{ field.errors }}
+                {{ field.label_tag }}
+                {% render_field field class="form-control" %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-outline-primary">Save</button>
+        <a href="{% url 'delete_hall' hall.pk %}" class="btn btn-outline-danger ">Delete</a>
     </form>
-
-    <a href="{% url 'delete_hall' hall.pk %}" class="btn btn-outline-danger ">Delete</a>
 
 {% endblock %}

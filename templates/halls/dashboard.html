@@ -1,8 +1,37 @@
 {% extends 'dashbase.html' %}
 {% block title %}
-Dashboard
+    Dashboard
 {% endblock %}
 
+
 {% block content %}
-Content here
+    <h1>{{ user.username }}'s hall of fame</h1>
+    <a href="{% url 'create_hall' %}" class="btn btn-outline-success">Create a new Hall of fame</a>
+    <ul>
+        {% for hall in halls %}
+            <li class="list-unstyled my-4"><a href="{% url 'detail_hall' hall.pk %}">{{ hall.title }}</a></li>
+            <div class="row">
+                {% for video in hall.video_set.all %}
+                    <div class="col-sm-6">
+                        <div class="card my-3">
+                            <div class="card-body">
+                                <div class="embed-responsive embed-responsive-4by3 ">
+                                    <iframe
+                                            class="embed-responsive-item card-text"
+                                            src="https://www.youtube.com/embed/{{ video.youtube_id }}?controls=0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowfullscreen>
+                                    </iframe>
+
+                                </div>
+                                <a href="{% url 'delete_video' video.pk %}" class="btn btn-outline-danger my-2">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </ul>
+
+
 {% endblock %}

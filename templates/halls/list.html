@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    List of Hall
+{% endblock %}
+
+{% block content %}
+    {% for hall in halls %}
+        <p>{{ hall.title }} &nbsp; <small><a href="{% url 'add_video' hall.pk %}">Add videos</a></small> </p>
+
+    {% endfor %}
+{% endblock %}

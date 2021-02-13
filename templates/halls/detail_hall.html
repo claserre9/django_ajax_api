@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 {% load static %}
@@ -9,5 +8,10 @@
 
 {% block content %}
     <h2>{{ hall.title }}</h2>
-    <h4 class="text-muted">{{ hall.user.username }}</h4>
+
+    <div class="list-group w-25">
+        <a href="{% url 'add_video' hall.pk %}" class="list-group-item list-group-item-action list-group-item-success">Add a video</a>
+        <a href="{% url 'update_hall' hall.pk %}" class="list-group-item list-group-item-action list-group-item-info">Edit Hall of fame</a>
+        <a href="{% url 'delete_hall' hall.pk %}" class="list-group-item list-group-item-action list-group-item-danger">Delete Hall of fame</a>
+    </div>
 {% endblock %}
